@@ -42,6 +42,11 @@ typedef struct {} NArg_60; typedef struct {} NArg_61; typedef struct {} NArg_62;
     19,18,17,16,15,14,13,12,11,10, \
     9,8,7,6,5,4,3,2,1,0
 
+/* NArg_N-based _Generic selection utilities */
+
+#define WPPT_DEFARG_FUNCTION(name, N) name ## _default_ ## N
+#define WPPT_DEFARG_GENERIC(name, N) NArg_ ## N: name ## _default_ ## N
+
 /* for-loop utilities */
 
 #ifndef countof
