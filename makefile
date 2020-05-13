@@ -41,14 +41,11 @@ clean:
 
 build-test: prebuild $(TEST_EXES)
 build-example: prebuild $(EXAMPLE_EXES)
-build: prebuild $(TEST_EXES) $(EXAMPLE_EXES)
 
 execute-test:
 	for FILE in $(TEST_EXES); do $$FILE; done
 execute-example:
 	for FILE in $(EXAMPLE_EXES); do $$FILE; done
-execute: execute-test execute-example
 
 test: build-test execute-test
 example: build-example execute-example
-all: build execute
