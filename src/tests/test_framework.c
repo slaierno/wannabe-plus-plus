@@ -66,17 +66,14 @@ WPPT_TEST(test_framework_memory) {
 #define countof(arr) sizeof(arr) / sizeof((arr)[0])
 #endif
 
-    ASSERT_STMT( !memcmp(&t1, &t2, sizeof(TestStruct)));
-    ASSERT_STMT(!!memcmp(&t1, &t3, sizeof(TestStruct)));
-    ASSERT_STMT(!!memcmp(&t2, &t3, sizeof(TestStruct)));
-    ASSERT_STMT( !memcmp(&ta1, &ta2, sizeof(TestStruct)*countof(ta1)));
-    ASSERT_STMT(!!memcmp(&ta1, &ta3, sizeof(TestStruct)*countof(ta1)));
-    ASSERT_STMT(!!memcmp(&ta2, &ta3, sizeof(TestStruct)*countof(ta2)));
-    ASSERT_STMT( !memcmp(&ta1, &ta3, sizeof(TestStruct)));
-    ASSERT_STMT( !memcmp(&ta2, &ta3, sizeof(TestStruct)));
-    ASSERT_STRUCT(&t1, &t2);
-    ASSERT_STRUCT_FAIL(&t1, &t3);
-    ASSERT_STRUCT_FAIL(&t2, &t3);
+    ASSERT_EXPR( !memcmp(&t1, &t2, sizeof(TestStruct)));
+    ASSERT_EXPR(!!memcmp(&t1, &t3, sizeof(TestStruct)));
+    ASSERT_EXPR(!!memcmp(&t2, &t3, sizeof(TestStruct)));
+    ASSERT_EXPR( !memcmp(&ta1, &ta2, sizeof(TestStruct)*countof(ta1)));
+    ASSERT_EXPR(!!memcmp(&ta1, &ta3, sizeof(TestStruct)*countof(ta1)));
+    ASSERT_EXPR(!!memcmp(&ta2, &ta3, sizeof(TestStruct)*countof(ta2)));
+    ASSERT_EXPR( !memcmp(&ta1, &ta3, sizeof(TestStruct)));
+    ASSERT_EXPR( !memcmp(&ta2, &ta3, sizeof(TestStruct)));
     ASSERT_MEM(&t1, &t2, sizeof(t1));
     ASSERT_MEM_FAIL(&t1, &t3, sizeof(t1));
     ASSERT_MEM_FAIL(&t2, &t3, sizeof(t1));

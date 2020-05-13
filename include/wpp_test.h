@@ -139,7 +139,7 @@ bool WPPT_CHECK_FUN_NAME(suffix)(bool result, bool assert, TYPE const e, TYPE co
 #undef WPPT_PRINT_FUN_NAME
 #undef WPPT_EQ_FUN_NAME
 
-#define WPPT_CHECK_BASE(result, assert, e, a, size, stmt, ...) \
+#define WPPT_CHECK_BASE(result, assert, e, a, size, expr, ...) \
     _Generic(((e) + _Generic((e),                    \
                             unsigned char     : 0ULL, \
                             unsigned short    : 0ULL,  \
@@ -156,32 +156,28 @@ bool WPPT_CHECK_FUN_NAME(suffix)(bool result, bool assert, TYPE const e, TYPE co
         double complex: WPPT_CHECK_FUN_NAME(dc),  \
    long double complex: WPPT_CHECK_FUN_NAME(ldc), \
                default: WPPT_CHECK_FUN_NAME(ptr)  \
-    )(result, assert, e, a, size, __FILE__, __LINE__, __func__, stmt, WPP_NARG(__VA_ARGS__), ##__VA_ARGS__)
+    )(result, assert, e, a, size, __FILE__, __LINE__, __func__, expr, WPP_NARG(__VA_ARGS__), ##__VA_ARGS__)
 
 #define WPPT_MACRO_STR(NAME, ...) #NAME "(" #__VA_ARGS__ ")"
 #define  FAIL_MSG(msg) ({printf("%s:%d %s - FAIL: %s\n" , __FILE__, __LINE__, __func__, msg);         false;})
 #define ABORT_MSG(msg) ({printf("%s:%d %s - ABORT: %s\n", __FILE__, __LINE__, __func__, msg);exit(-1);false;})
 
 /*                       NAME(args      , ...)                                           WPPT_CHECK_BASE(result, assert,  exp,      act, size, WPPT_MACRO_STR(            MACRO_NAME               ), ##__VA_ARGS__) */
-#define            CHECK_STMT(stmt,       ...) ({                                        WPPT_CHECK_BASE(  true,  false, true, !!(stmt),    0, WPPT_MACRO_STR(CHECK_STMT, stmt, ##__VA_ARGS__)            , ##__VA_ARGS__);})
-#define       CHECK_STMT_FAIL(stmt,       ...) ({                                        WPPT_CHECK_BASE( false,  false, true, !!(stmt),    0, WPPT_MACRO_STR(CHECK_STMT_FAIL, stmt, ##__VA_ARGS__)       , ##__VA_ARGS__);})
-#define           ASSERT_STMT(stmt,       ...) ({                                        WPPT_CHECK_BASE(  true,   true, true, !!(stmt),    0, WPPT_MACRO_STR(ASSERT_STMT, stmt, ##__VA_ARGS__)           , ##__VA_ARGS__);})
-#define      ASSERT_STMT_FAIL(stmt,       ...) ({                                        WPPT_CHECK_BASE( false,   true, true, !!(stmt),    0, WPPT_MACRO_STR(ASSERT_STMT_FAIL, stmt, ##__VA_ARGS__)      , ##__VA_ARGS__);})
+#define            CHECK_EXPR(expr,       ...) ({                                        WPPT_CHECK_BASE(  true,  false, true, !!(expr),    0, WPPT_MACRO_STR(CHECK_EXPR, stmt, ##__VA_ARGS__)            , ##__VA_ARGS__);})
+#define       CHECK_EXPR_FAIL(expr,       ...) ({                                        WPPT_CHECK_BASE( false,  false, true, !!(expr),    0, WPPT_MACRO_STR(CHECK_EXPR_FAIL, stmt, ##__VA_ARGS__)       , ##__VA_ARGS__);})
+#define           ASSERT_EXPR(expr,       ...) ({                                        WPPT_CHECK_BASE(  true,   true, true, !!(expr),    0, WPPT_MACRO_STR(ASSERT_EXPR, stmt, ##__VA_ARGS__)           , ##__VA_ARGS__);})
+#define      ASSERT_EXPR_FAIL(expr,       ...) ({                                        WPPT_CHECK_BASE( false,   true, true, !!(expr),    0, WPPT_MACRO_STR(ASSERT_EXPR_FAIL, stmt, ##__VA_ARGS__)      , ##__VA_ARGS__);})
 #define                 CHECK(e, a,       ...) ({                                        WPPT_CHECK_BASE(  true,  false,    e,        a,    0, WPPT_MACRO_STR(CHECK, e, a, ##__VA_ARGS__)                 , ##__VA_ARGS__);})
 #define                ASSERT(e, a,       ...) ({                                        WPPT_CHECK_BASE(  true,   true,    e,        a,    0, WPPT_MACRO_STR(ASSERT, e, a, ##__VA_ARGS__)                , ##__VA_ARGS__);})
 #define            CHECK_FAIL(e, a,       ...) ({                                        WPPT_CHECK_BASE( false,  false,    e,        a,    0, WPPT_MACRO_STR(CHECK_FAIL, e, a, ##__VA_ARGS__)            , ##__VA_ARGS__);})
 #define           ASSERT_FAIL(e, a,       ...) ({                                        WPPT_CHECK_BASE( false,  true ,    e,        a,    0, WPPT_MACRO_STR(ASSERT_FAIL, e, a, ##__VA_ARGS__)           , ##__VA_ARGS__);})
 #define             CHECK_MEM(e, a, size, ...) ({ size_t s =               size; if(s>0) WPPT_CHECK_BASE(  true,  false,    e,        a,    s, WPPT_MACRO_STR(CHECK_MEM, e, a, size, ##__VA_ARGS__)       , ##__VA_ARGS__);})
-#define          CHECK_STRUCT(e, a,       ...) ({ size_t s =       sizeof(*(e)); if(s>0) WPPT_CHECK_BASE(  true,  false,    e,        a,    s, WPPT_MACRO_STR(CHECK_STRUCT, e, a, ##__VA_ARGS__)          , ##__VA_ARGS__);})
 #define           CHECK_ARRAY(e, a,  cnt, ...) ({ size_t s = (cnt)*sizeof(*(e)); if(s>0) WPPT_CHECK_BASE(  true,  false,    e,        a,    s, WPPT_MACRO_STR(CHECK_ARRAY, e, a, cnt, ##__VA_ARGS__)      , ##__VA_ARGS__);})
 #define            ASSERT_MEM(e, a, size, ...) ({ size_t s =               size; if(s>0) WPPT_CHECK_BASE(  true,   true,    e,        a,    s, WPPT_MACRO_STR(ASSERT_MEM, e, a, size, ##__VA_ARGS__)      , ##__VA_ARGS__);})
-#define         ASSERT_STRUCT(e, a,       ...) ({ size_t s =       sizeof(*(e)); if(s>0) WPPT_CHECK_BASE(  true,   true,    e,        a,    s, WPPT_MACRO_STR(ASSERT_STRUCT, e, a, ##__VA_ARGS__)         , ##__VA_ARGS__);})
 #define          ASSERT_ARRAY(e, a,  cnt, ...) ({ size_t s = (cnt)*sizeof(*(e)); if(s>0) WPPT_CHECK_BASE(  true,   true,    e,        a,    s, WPPT_MACRO_STR(ASSERT_ARRAY, e, a, cnt, ##__VA_ARGS__)     , ##__VA_ARGS__);})
 #define        CHECK_MEM_FAIL(e, a, size, ...) ({ size_t s =               size; if(s>0) WPPT_CHECK_BASE( false,  false,    e,        a,    s, WPPT_MACRO_STR(CHECK_MEM_FAIL, e, a, size, ##__VA_ARGS__)  , ##__VA_ARGS__); else{ FAIL_MSG(WPPT_MACRO_STR(CHECK_MEM_FAIL, e, a, size, ##__VA_ARGS__)  " - Memory check automatically leads to true with size == 0");}})
-#define     CHECK_STRUCT_FAIL(e, a,       ...) ({ size_t s =       sizeof(*(e)); if(s>0) WPPT_CHECK_BASE( false,  false,    e,        a,    s, WPPT_MACRO_STR(CHECK_STRUCT_FAIL, e, a, ##__VA_ARGS__)     , ##__VA_ARGS__); else{ FAIL_MSG(WPPT_MACRO_STR(CHECK_STRUCT_FAIL, e, a, ##__VA_ARGS__)     " - Memory check automatically leads to true with size == 0");}})
 #define      CHECK_ARRAY_FAIL(e, a,  cnt, ...) ({ size_t s = (cnt)*sizeof(*(e)); if(s>0) WPPT_CHECK_BASE( false,  false,    e,        a,    s, WPPT_MACRO_STR(CHECK_ARRAY_FAIL, e, a, cnt, ##__VA_ARGS__) , ##__VA_ARGS__); else{ FAIL_MSG(WPPT_MACRO_STR(CHECK_ARRAY_FAIL, e, a, cnt, ##__VA_ARGS__) " - Memory check automatically leads to true with size == 0");}})
 #define       ASSERT_MEM_FAIL(e, a, size, ...) ({ size_t s =               size; if(s>0) WPPT_CHECK_BASE( false,   true,    e,        a,    s, WPPT_MACRO_STR(ASSERT_MEM_FAIL, e, a, size, ##__VA_ARGS__) , ##__VA_ARGS__); else{ABORT_MSG(WPPT_MACRO_STR(ASSERT_MEM_FAIL, e, a, size, ##__VA_ARGS__) " - Memory check automatically leads to true with size == 0");}})
-#define    ASSERT_STRUCT_FAIL(e, a,       ...) ({ size_t s =       sizeof(*(e)); if(s>0) WPPT_CHECK_BASE( false,   true,    e,        a,    s, WPPT_MACRO_STR(ASSERT_STRUCT_FAIL, e, a, ##__VA_ARGS__)    , ##__VA_ARGS__); else{ABORT_MSG(WPPT_MACRO_STR(ASSERT_STRUCT_FAIL, e, a, ##__VA_ARGS__)    " - Memory check automatically leads to true with size == 0");}})
 #define     ASSERT_ARRAY_FAIL(e, a,  cnt, ...) ({ size_t s = (cnt)*sizeof(*(e)); if(s>0) WPPT_CHECK_BASE( false,   true,    e,        a,    s, WPPT_MACRO_STR(ASSERT_ARRAY_FAIL, e, a, cnt, ##__VA_ARGS__), ##__VA_ARGS__); else{ABORT_MSG(WPPT_MACRO_STR(ASSERT_ARRAY_FAIL, e, a, cnt, ##__VA_ARGS__)" - Memory check automatically leads to true with size == 0");}})
 
 /* TEST FUNCTIONS, TEST CASES, ETC */
