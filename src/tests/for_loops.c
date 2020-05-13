@@ -1,3 +1,4 @@
+#ifndef WPP_NO_FOR_LOOP_UTILS
 #include "wpp_test.h"
 
 #define DEST_BUFFER_SIZE 256
@@ -49,3 +50,6 @@ WPPT_TEST_MAIN() {
     WPPT_TEST_RUN_ALL();
     return 0;
 }
+#else
+void main() {}
+#endif

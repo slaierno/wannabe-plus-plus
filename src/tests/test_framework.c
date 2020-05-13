@@ -62,6 +62,10 @@ WPPT_TEST(test_framework_memory) {
     TestStruct ta2[] = {{10, 13}, {10,15}};
     TestStruct ta3[] = {{10, 13}, {10,17}};
 
+#ifndef countof
+#define countof(arr) sizeof(arr) / sizeof((arr)[0])
+#endif
+
     ASSERT_STMT( !memcmp(&t1, &t2, sizeof(TestStruct)));
     ASSERT_STMT(!!memcmp(&t1, &t3, sizeof(TestStruct)));
     ASSERT_STMT(!!memcmp(&t2, &t3, sizeof(TestStruct)));

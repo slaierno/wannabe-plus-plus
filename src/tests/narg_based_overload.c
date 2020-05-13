@@ -35,8 +35,7 @@ static inline void foo_default_0()                                {return foo_de
     NArg_4: foo_default_4  \
 )(__VA_ARGS__)
 
-int main(int argc, char** argv)
-{
+WPPT_TEST(narg_based_overload) {
     foo();
     foo(1);
     foo(1, 2);
@@ -51,6 +50,10 @@ int main(int argc, char** argv)
          1, 2, 3,14,
          1, 2, 3, 4}), dest_buffer, 20);
     reset();
+}
 
+WPPT_TEST_MAIN() {
+    WPPT_TEST_SET(narg_based_overload);
+    WPPT_TEST_RUN_ALL();
     return 0;
 }

@@ -16,6 +16,7 @@ EXAMPLE_FILES := $(wildcard $(EXAMPLES_DIR)/*.c)
     TEST_EXES := $(patsubst $(TESTS_DIR)/%.c,$(OUT_TESTS_DIR)/%.out,$(TEST_FILES))
  EXAMPLE_EXES := $(patsubst $(EXAMPLES_DIR)/%.c,$(OUT_EXAMPLES_DIR)/%.out,$(EXAMPLE_FILES))
 
+
 # We do not care about optimizations...
 CFLAGS := -g -O0 -std=gnu11 -I$(INCLUDE_DIR) $(EXTRA_FLAGS)
 

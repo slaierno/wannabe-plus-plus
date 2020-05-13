@@ -218,10 +218,17 @@ printf("...done! Result: %s\n", wppt_test_result ? "OK" : "FAIL");
 
 #define WPPT_TEST_RUN(name) WPPT_TEST_RUN_BASE(WPPT_TEST_PREFIX ## name, #name);
 
+#ifndef WPP_NO_FOR_LOOP_UTILS
 #define WPPT_TEST_RUN_ALL() ({ \
     for_each_ref_count(test, wppt_test_list, wppt_test_count) { \
         WPPT_TEST_RUN_BASE((test->test_function), test->test_name) \
     } \
 })
-
+#else
+#define WPPT_TEST_RUN_ALL() ({ \
+    for(int i = 0; i < wppt_test_count; i++) { \
+        WPPT_TEST_RUN_BASE((wppt_test_list[i].test_function), wppt_test_list[i].test_name) \
+    } \
+})
+#endif
 #endif

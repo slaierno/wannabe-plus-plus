@@ -42,11 +42,7 @@ typedef struct {} NArg_60; typedef struct {} NArg_61; typedef struct {} NArg_62;
     19,18,17,16,15,14,13,12,11,10, \
     9,8,7,6,5,4,3,2,1,0
 
-/* NArg_N-based _Generic selection utilities */
-
-#define WPPT_DEFARG_FUNCTION(name, N) name ## _default_ ## N
-#define WPPT_DEFARG_GENERIC(name, N) NArg_ ## N: name ## _default_ ## N
-
+#ifndef WPP_NO_FOR_LOOP_UTILS
 /* for-loop utilities */
 
 #ifndef countof
@@ -57,7 +53,7 @@ typedef struct {} NArg_60; typedef struct {} NArg_61; typedef struct {} NArg_62;
 for(size_t arr_idx = 0, __for_stop = 0; __for_stop++ == 0;) \
 for(TYPE val_array[] = __VA_ARGS__, var_name = val_array[0] ; arr_idx < countof(val_array); var_name = val_array[++arr_idx])
 
-#ifdef NO_AUTO_TYPE
+#ifdef WPP_NO_AUTO_TYPE
     #define for_each_ref_count(it, list, count) for (typeof(&*list) it = (list); it < (list) + (count); it++)
 
     #define for_each_val_count(el, list, count) \
@@ -77,5 +73,6 @@ for(TYPE val_array[] = __VA_ARGS__, var_name = val_array[0] ; arr_idx < countof(
 
 #define for_each_val(it, list, ...) for_each_val_count(it, list, WPP_GET_COUNT(list, __VA_ARGS__))
 #define for_each_ref(it, list, ...) for_each_ref_count(it, list, WPP_GET_COUNT(list, __VA_ARGS__))
+#endif
 
 #endif
