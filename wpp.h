@@ -70,10 +70,4 @@ for(TYPE val_array[] = __VA_ARGS__, var_name = val_array[0] ; arr_idx < countof(
 #define for_each_val(it, list, ...) for_each_val_count(it, list, WPP_GET_COUNT(list, __VA_ARGS__))
 #define for_each_ref(it, list, ...) for_each_ref_count(it, list, WPP_GET_COUNT(list, __VA_ARGS__))
 
-/* lambda-like function via GCC expression statement and nested functions */
-
-#define lambda(RET_TYPE, FUN_BODY) ({ RET_TYPE __fn__ FUN_BODY __fn__; })
-// int (*max)(int, int) = lambda(int, (int x, int y) { return x > y ? x : y; });
-// max(4, 5);
-
 #endif
