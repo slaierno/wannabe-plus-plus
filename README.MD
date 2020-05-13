@@ -26,11 +26,57 @@ A header-only test framework.
 
 It provides check/assert macros with failure messages and test cases via function-defining macros.
 
-### `CHECK/ASSERT_*(...)`
+### `CHECK` and `ASSERT` macros
+
+The macros follow the following EBNF, where:
+* `c_string` represents any valid C string literal
+* `c_expr` represents any valid C expression
+* `c_num` represents any valid C numeric literal
+
+```EBNF
+action(type) = ("CHECK" | "ASSERT"), type, ["_FAIL"];
+
+cmp_action      = action();
+exp_action      = action("_EXPR");
+cmp_action_size = action(("_MEM"|"_ARRAY"));
+exp_check      = stmt_action    , "(", c_expr,                          [",", c_string], ")";
+cmp_check      = expr_action    , "(", c_expr, ",", c_expr,             [",", c_string], ")";
+cmp_check_size = cmp_action_size, "(", c_expr, ",", c_expr, ",", c_num, [",", c_string], ")";
+```
+
+Examples from which every macro can be derived:
+
+| Macro | Description |
+|-------|-------------|
+| `CHECK_EXPR(expr)` | Check that `expr` is not `0` |
+| `CHECK(exp, act)` | Check that `exp == act` is `true` |
+| `CHECK_MEM(exp, act, size)` | Check that `memcmp(exp, act, size)` returns `0`  |
+| `CHECK_ARRAY(exp, act, cnt)` | Check that `memcmp(exp, act, sizeof(*exp)*cnt)` returns `0`  |
+
+* `CHECK` and `ASSERT` version of a macro gives, respectively, non-blocking and blocking checks.  
+* `_FAIL` versions are expected to fail their condition.
+* Every macro can accept an optional failing message that will be showed in addition to default failing message
+* `CHECK_MEM` and `CHECK_ARRAY` casts the pointer/arrays to `void*`
+* `CHECK` selects the type to be checked looking at its first argument and calling a function that accepts two arguments of this type. E.g.  
+  ```C
+  int a = 1; float b = 1.0;
+  CHECK(a, b);
+  CHECK(b, a);
+  ```
+  will call, respectively, two functions like:  
+  ```C
+  bool check_int(int a, int b) { return a == b; }
+  bool check_float(float a, float b) { return abs(a - b) < EPS; }
+  ```
+  **BEWARE**: this means that:
+  ```C
+  CHECK_C(1  , 1.9); // call check_int -> 1.9 gets truncated to 1 -> PASS!
+  CHECK_C(1.9, 1); // call check_float -> 1 is casted to float    -> FAIL!
+  ```
+  TODO: this behaviour needs to change!
 
 
-
-## How to include it in my project
+## How do I include it in my project
 
 Just download [wpp.h](https://raw.githubusercontent.com/slaierno/wannabe-plus-plus/master/include/wpp.h) and include it in you project.
 
