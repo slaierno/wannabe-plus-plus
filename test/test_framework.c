@@ -5,7 +5,7 @@ typedef struct {
     int b;
 } TestStruct;
 
-WPPT_TEST(test_framework_primitive) {
+WPPT_TEST(test_framework_primitives) {
     /* TEST PRIMITIVE TYPES (no pointers) */
 #define TEST_PRIMITIVE_TYPE(Type, val) { Type i = val, j = val; ASSERT(i,j); }
     TEST_PRIMITIVE_TYPE(bool, true);
@@ -33,9 +33,10 @@ WPPT_TEST(test_framework_primitive) {
     ASSERT_FAIL(0, 1);
 }
 
-int test_function(void) {return 0;}
 
 WPPT_TEST(test_framework_pointers) {
+
+    int test_function(void) {return 0;}
 
     /* TEST POINTER */
     {
@@ -91,7 +92,7 @@ WPPT_TEST(test_framework_memory) {
 }
 
 WPPT_TEST_MAIN() {
-    WPPT_TEST_SET(test_framework_primitive);
+    WPPT_TEST_SET(test_framework_primitives);
     WPPT_TEST_SET(test_framework_pointers);
     WPPT_TEST_SET(test_framework_memory);
     WPPT_TEST_RUN_ALL();

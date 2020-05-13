@@ -2,6 +2,74 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+/* EXAMPLE #0: _Generic selection
+ *
+ * This example will just illustrate how basic _Generic selection will work.
+ * Please refer to the C11 standard for further information.
+ *
+ * We will create an eq() function that will return a bool value indicating
+ *  if its two arguments are equal or not.
+ */
+
+/* Things are easy for integer types */
+bool eq_ll(long long x, long long y)
+{
+    return x == y;
+}
+
+/* Floating point values can be "equal" even if they are not equal.
+ * FP arithmetic is an approximation, and we will define two FP numbers as
+ *  "equal" if their difference (absolute value) is under a certain EPSILON
+ *  value. The more precise is the FP type, the little will EPSILON be.
+ * A _Generic selection will return the appropriate EPSILON.
+ */
+#define EPSILON(x) _Generic((x),\
+    float      : 0x2p-23, \
+    double     : 0x2p-52,  \
+    long double: 0x2p-52   )
+#define ABS(x) (((x) >= 0) ? (x) : -(x))
+bool eq_f(float x, float y)
+{
+    float d = x - y;
+    return ABS(d) < EPSILON(d);
+}
+bool eq_d(double x, double y)
+{
+    double d = x - y;
+    return ABS(d) < EPSILON(d);
+}
+bool eq_ld(long double x, long double y)
+{
+    long double d = x - y;
+    return ABS(d) < EPSILON(d);
+}
+
+/* Now we can select the correct equality function with a _Generic selection.
+ * Note that we sum 0LL to the variable on which we are going to do the 
+ *  selection in order to cast any integer type to long long.
+ */
+
+#define EQ(x, y) _Generic(((x)+0LL), \
+    long long: eq_ll, \
+    float: eq_f, \
+    double: eq_d, \
+    long double: eq_ld \
+    )(x, y)
+
+void example_generic_overload(void)
+{
+          float a_f  = 1, b_f  = 49, a1_f  = (a_f  / b_f ) * b_f;
+         double a_d  = 1, b_d  = 49, a1_d  = (a_d  / b_d ) * b_d;
+    long double a_ld = 1, b_ld = 49, a1_ld = (a_ld / b_ld) * b_ld;
+
+    printf("      float(1 == (1/49*49)) %s\n", (a_f  == a1_f ) ? "TRUE" : "FALSE");
+    printf("     double(1 == (1/49*49)) %s\n", (a_d  == a1_d ) ? "TRUE" : "FALSE");
+    printf("long double(1 == (1/49*49)) %s\n", (a_ld == a1_ld) ? "TRUE" : "FALSE");
+    printf("         EQ(1  , (1/49*49)) %s\n", EQ(a_f , a1_f ) ? "TRUE" : "FALSE");
+    printf("         EQ(1  , (1/49*49)) %s\n", EQ(a_d , a1_d ) ? "TRUE" : "FALSE");
+    printf("         EQ(1  , (1/49*49)) %s\n", EQ(a_ld, a1_ld) ? "TRUE" : "FALSE");
+}
+
 /* EXAMPLE #1: default argument and argument-number-based overload.
  * 
  * Overload can be made based on the number of arguments passed to a _Generic selection.
@@ -136,7 +204,7 @@ void example_defarg_type_overload() {
 
 /* EXAMPLE #2bis
  *
- * Same as #2, but with helping macros.
+ * Same as #2, but with a helper macro.
  */
 
 #define _GT(name, ...) _Generic((WPP_NARG_T(__VA_ARGS__)){}, NArg_0: name ## _default_0, \
@@ -166,6 +234,7 @@ void example_defarg_type_overload_helper_macro() {
 
 int main(int argc, char** argv)
 {
+    example_generic_overload();
     example_defarg_overload();
     example_defarg_type_overload();
     example_defarg_type_overload_helper_macro();
