@@ -1,6 +1,5 @@
 CC = gcc
 
-
 PROJECT_DIR := $(dir $(abspath $(firstword $(MAKEFILE_LIST))))
 
      INCLUDE_DIR := $(PROJECT_DIR)include
@@ -43,9 +42,9 @@ build-test: prebuild $(TEST_EXES)
 build-example: prebuild $(EXAMPLE_EXES)
 
 execute-test:
-	for FILE in $(TEST_EXES); do $$FILE; done
+	@for FILE in $(TEST_EXES); do $$FILE; done
 execute-example:
-	for FILE in $(EXAMPLE_EXES); do $$FILE; done
+	@for FILE in $(EXAMPLE_EXES); do $$FILE; done
 
 test: build-test execute-test
 example: build-example execute-example
