@@ -1,4 +1,4 @@
-CC = gcc-8
+CC = gcc
 
 DEPS := wpp.h \
 	    wpp_test.h
@@ -36,10 +36,16 @@ clean:
 	rm -rf $(EXES_EXMP_DIR)
 	rm -rf $(EXES_DIR)
 
+build-test: prebuild $(TEST_EXES)
+build-example: prebuild $(EXMP_EXES)
 build: prebuild $(TEST_EXES) $(EXMP_EXES)
 
-execute: 
+execute-test:
 	for FILE in $(TEST_EXES); do $$FILE; done
+execute-example:
 	for FILE in $(EXMP_EXES); do $$FILE; done
+execute: execute-test execute-example
 
-all: clean build execute
+test: build-test execute-test
+example: build-example execute-example
+all: build execute
