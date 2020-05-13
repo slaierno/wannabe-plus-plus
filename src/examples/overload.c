@@ -1,4 +1,4 @@
-#include "../wpp.h"
+#include "wpp.h"
 #include <stdio.h>
 #include <stdbool.h>
 

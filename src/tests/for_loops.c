@@ -1,4 +1,4 @@
-#include "../wpp_test.h"
+#include "wpp_test.h"
 
 #define DEST_BUFFER_SIZE 256
 

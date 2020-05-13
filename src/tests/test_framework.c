@@ -1,4 +1,4 @@
-#include "../wpp_test.h"
+#include "wpp_test.h"
 
 typedef struct {
     int a;
@@ -36,7 +36,7 @@ WPPT_TEST(test_framework_primitives) {
 
 WPPT_TEST(test_framework_pointers) {
 
-    int test_function(void) {return 0;}
+    int test_function(void) { return 0; }
 
     /* TEST POINTER */
     {
