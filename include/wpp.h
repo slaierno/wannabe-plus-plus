@@ -57,11 +57,19 @@ typedef struct {} NArg_60; typedef struct {} NArg_61; typedef struct {} NArg_62;
 for(size_t arr_idx = 0, __for_stop = 0; __for_stop++ == 0;) \
 for(TYPE val_array[] = __VA_ARGS__, var_name = val_array[0] ; arr_idx < countof(val_array); var_name = val_array[++arr_idx])
 
-#define for_each_ref_count(it, list, count) for (__auto_type it = (list); it < (list) + (count); it++)
+#ifdef NO_AUTO_TYPE
+    #define for_each_ref_count(it, list, count) for (typeof(&*list) it = (list); it < (list) + (count); it++)
 
-#define for_each_val_count(el, list, count) \
-    for(size_t arr_idx = 0, __for_stop = 0; __for_stop++ == 0;) \
-    for(__auto_type el = (list)[0]; arr_idx < (count); el = (list)[++arr_idx])
+    #define for_each_val_count(el, list, count) \
+        for(size_t arr_idx = 0, __for_stop = 0; __for_stop++ == 0;) \
+        for(typeof(*list) el = (list)[0]; arr_idx < (count); el = (list)[++arr_idx])
+#else
+    #define for_each_ref_count(it, list, count) for (__auto_type it = (list); it < (list) + (count); it++)
+
+    #define for_each_val_count(el, list, count) \
+        for(size_t arr_idx = 0, __for_stop = 0; __for_stop++ == 0;) \
+        for(__auto_type el = (list)[0]; arr_idx < (count); el = (list)[++arr_idx])
+#endif
 
 #define WPP_GET_COUNT(list, ...) _Generic((WPP_NARG_T(__VA_ARGS__)){}, \
     NArg_0: countof(list), \

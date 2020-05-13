@@ -33,11 +33,9 @@ WPPT_TEST(test_framework_primitives) {
     ASSERT_FAIL(0, 1);
 }
 
+int test_function(void) { return 0; }
 
 WPPT_TEST(test_framework_pointers) {
-
-    int test_function(void) { return 0; }
-
     /* TEST POINTER */
     {
         int i = 0, *i_p = &i, *j_p = &i; 

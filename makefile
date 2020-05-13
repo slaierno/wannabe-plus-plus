@@ -17,7 +17,7 @@ EXAMPLE_FILES := $(wildcard $(EXAMPLES_DIR)/*.c)
  EXAMPLE_EXES := $(patsubst $(EXAMPLES_DIR)/%.c,$(OUT_EXAMPLES_DIR)/%.out,$(EXAMPLE_FILES))
 
 # We do not care about optimizations...
-CFLAGS := -g -O0 -std=gnu11 -I$(INCLUDE_DIR)
+CFLAGS := -g -O0 -std=gnu11 -I$(INCLUDE_DIR) $(EXTRA_FLAGS)
 
 $(OUTPUT_DIR)/%.out: $(SOURCE_DIR)/%.c $(INCLUDE_FILES)
 	$(CC) $(CFLAGS) -o $@ $<
@@ -42,9 +42,9 @@ build-test: prebuild $(TEST_EXES)
 build-example: prebuild $(EXAMPLE_EXES)
 
 execute-test:
-	@for FILE in $(TEST_EXES); do $$FILE; done
+	for FILE in $(TEST_EXES); do $$FILE; done
 execute-example:
-	@for FILE in $(EXAMPLE_EXES); do $$FILE; done
+	for FILE in $(EXAMPLE_EXES); do $$FILE; done
 
 test: build-test execute-test
 example: build-example execute-example
