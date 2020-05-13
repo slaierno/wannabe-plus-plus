@@ -18,9 +18,9 @@ bool wppt_test_result = true;
 #define WPPT_EQ_FUN_NAME(suffix) wppt_is_equal_ ## suffix
 
 #define WPPT_FP_EPS(x) _Generic((x+I),\
-    float complex      : 2E-23, \
-    double complex     : 2E-52,  \
-    long double complex: 2E-63    )
+    float complex      : 0x2p-23F, \
+    double complex     : 0x2p-52,   \
+    long double complex: 0x2p-52L    )
 #define WPPT_ABS(x) ((x) > 0 ? (x) : -(x))
 #define WPPT_DST(x, y) WPPT_ABS((x) - (y))
 #define WPPT_CHECK_FLOAT_EQ(e, a) (WPPT_DST(e, a) < WPPT_FP_EPS(e))
